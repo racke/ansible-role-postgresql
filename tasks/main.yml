@@ -1,0 +1,73 @@
+---
+- name: Install required packages for PostgreSQL
+  apt:
+    name:
+      - postgresql
+      - python-psycopg2 # Required by Ansible
+    update_cache: yes
+    state: present
+
+- name: Create PostgreSQL role for owner
+  postgresql_user:
+    name: "{{ item.owner }}"
+  become: true
+  become_user: postgres
+  vars:
+    ansible_ssh_pipelining: true
+  when:
+    - "'owner' in item"
+  with_items:
+    - "{{ postgresql_databases }}"
+
+- name: Create additional roles for PostgreSQL
+  postgresql_user:
+    name: "{{ item }}"
+  become: true
+  become_user: postgres
+  vars:
+    ansible_ssh_pipelining: true
+  with_items:
+    - "{{ postgresql_extra_roles }}"
+
+- name: Copy PostgreSQL dump files
+  copy:
+    src: "{{ item.restore_from }}"
+    dest: "/home/{{ item.owner }}/{{ item.restore_from }}"
+    owner: "{{ item.owner}}"
+    mode: 0400
+  when:
+    - "'restore_from' in item"
+  with_items:
+    - "{{ postgresql_databases }}"
+
+- name: Create PostgreSQL databases
+  postgresql_db:
+    name: "{{ item.name }}"
+    encoding: UTF-8
+    lc_collate: en_US.UTF-8
+    lc_ctype: en_US.UTF-8
+    owner: "{{ item.owner | default(omit) }}"
+  register: postgresql_db_created
+  become: true
+  become_user: postgres
+  vars:
+    ansible_ssh_pipelining: true
+  with_items:
+    - "{{ postgresql_databases }}"
+
+- name: Restore PostgreSQL databases from dump
+  postgresql_db:
+    name: "{{ item.name }}"
+    owner: "{{ item.owner | default(omit) }}"
+    login_user: "{{ item.owner | default(omit) }}"
+    state: restore
+    target: "/home/{{ item.owner }}/{{ item.restore_from }}"
+  become: true
+  become_user: eshop
+  vars:
+    ansible_ssh_pipelining: true
+  when:
+    - postgresql_db_created.changed
+    - "'restore_from' in item"
+  with_items:
+    - "{{ postgresql_databases }}"
