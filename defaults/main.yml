@@ -1,2 +1,3 @@
 ---
+postgresql_databases: []
 postgresql_extra_roles: []
