@@ -1,10 +1,13 @@
 ---
-- name: Install required packages for PostgreSQL
+- name: Install PostgreSQL server package
   apt:
     name:
       - postgresql
-      - python-psycopg2 # Required by Ansible
-    update_cache: yes
+    state: present
+
+- name: Install required packages for managing PostgreSQL databases
+  apt:
+    name: "{{ postgresql_ansible_requirements }}"
     state: present
 
 - name: Create PostgreSQL role for owner
