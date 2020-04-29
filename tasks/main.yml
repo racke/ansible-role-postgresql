@@ -66,7 +66,7 @@
     state: restore
     target: "/home/{{ item.owner }}/{{ item.restore_from }}"
   become: true
-  become_user: eshop
+  become_user: "{{ item.owner }}"
   vars:
     ansible_ssh_pipelining: true
   when:
