@@ -1,12 +1,27 @@
 ---
-- name: Install PostgreSQL server package
+- name: Install PostgreSQL server package (Debian family)
   apt:
     name:
       - postgresql
     state: present
+  when: ansible_os_family == 'Debian'
+
+- name: Install PostgreSQL server package (RedHat family)
+  yum:
+    name:
+      - postgresql-server
+    state: present
+  when: ansible_os_family == 'RedHat'
+
+- name: Install PostgreSQL server package (Suse family)
+  zypper:
+    name:
+      - postgresql-server
+    state: present
+  when: ansible_os_family == 'Suse'
 
 - name: Install required packages for managing PostgreSQL databases
-  apt:
+  package:
     name: "{{ postgresql_ansible_requirements }}"
     state: present
 
