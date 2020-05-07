@@ -47,17 +47,6 @@
   with_items:
     - "{{ postgresql_extra_roles }}"
 
-- name: Copy PostgreSQL dump files
-  copy:
-    src: "{{ item.restore_from }}"
-    dest: "/home/{{ item.owner }}/{{ item.restore_from }}"
-    owner: "{{ item.owner}}"
-    mode: 0400
-  when:
-    - "'restore_from' in item"
-  with_items:
-    - "{{ postgresql_databases }}"
-
 - name: Create PostgreSQL databases
   postgresql_db:
     name: "{{ item.name }}"
@@ -73,7 +62,21 @@
   with_items:
     - "{{ postgresql_databases }}"
 
-- name: Restore PostgreSQL databases from dump
+- name: Copy PostgreSQL text dump files
+  copy:
+    src: "{{ item.restore_from }}"
+    dest: "/home/{{ item.owner }}/{{ item.restore_from }}"
+    owner: "{{ item.owner}}"
+    group: "{{ item.group | default(item.owner) }}"
+    mode: 0400
+  when:
+    - postgresql_db_created.changed
+    - "'restore_from' in item"
+    - item.restore_type | default("") != 'custom'
+  with_items:
+    - "{{ postgresql_databases }}"
+
+- name: Restore PostgreSQL databases from text dumps
   postgresql_db:
     name: "{{ item.name }}"
     owner: "{{ item.owner | default(omit) }}"
@@ -87,5 +90,33 @@
   when:
     - postgresql_db_created.changed
     - "'restore_from' in item"
+    - item.restore_type | default("") != 'custom'
+  with_items:
+    - "{{ postgresql_databases }}"
+
+- name: Copy PostgreSQL custom dump files
+  copy:
+    src: "{{ item.restore_from }}"
+    dest: "/var/lib/postgresql/{{ item.restore_from }}"
+    owner: "postgres"
+    group: "postgres"
+    mode: 0400
+  when:
+    - postgresql_db_created.changed
+    - "'restore_from' in item"
+    - item.restore_type | default("") == 'custom'
+  with_items:
+    - "{{ postgresql_databases }}"
+
+- name: Restore PostgreSQL databases from custom dumps
+  command: "pg_restore -d {{ item.name }} -v -1 //var/lib/postgresql/{{ item.restore_from }}"
+  become: true
+  become_user: "postgres"
+  vars:
+    ansible_ssh_pipelining: true
+  when:
+    - postgresql_db_created.changed
+    - "'restore_from' in item"
+    - item.restore_type | default("") == 'custom'
   with_items:
     - "{{ postgresql_databases }}"
