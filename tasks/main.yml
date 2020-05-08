@@ -20,6 +20,12 @@
     state: present
   when: ansible_os_family == 'Suse'
 
+- name: Ensure that PostgreSQL server is started and enabled
+  service:
+    name: postgresql
+    state: started
+    enabled: yes
+
 - name: Install required packages for managing PostgreSQL databases
   package:
     name: "{{ postgresql_ansible_requirements }}"
