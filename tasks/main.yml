@@ -100,10 +100,21 @@
   with_items:
     - "{{ postgresql_databases }}"
 
+- name: Query information about the PostgreSQL user
+  getent:
+    database: passwd
+    key: postgres
+    split: ":"
+  register: postgres_user_info
+
+- name: Determine home directory of the PostgreSQL user
+  set_fact:
+    postgres_user_home: "{{ getent_passwd['postgres'][4] }}"
+
 - name: Copy PostgreSQL custom dump files
   copy:
     src: "{{ item.restore_from }}"
-    dest: "/var/lib/postgresql/{{ item.restore_from }}"
+    dest: "{{ postgres_user_home }}/{{ item.restore_from }}"
     owner: "postgres"
     group: "postgres"
     mode: 0400
@@ -115,7 +126,7 @@
     - "{{ postgresql_databases }}"
 
 - name: Restore PostgreSQL databases from custom dumps
-  command: "pg_restore -d {{ item.name }} -v -1 //var/lib/postgresql/{{ item.restore_from }}"
+  command: "pg_restore -d {{ item.name }} -v -1 {{ postgres_user_home}}/{{ item.restore_from }}"
   become: true
   become_user: "postgres"
   vars:
