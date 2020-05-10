@@ -2,5 +2,6 @@
 postgresql_user: postgres
 postgresql_databases: []
 postgresql_extra_roles: []
+postgresql_development: false
 postgresql_ansible_requirements:
   - python3-psycopg2

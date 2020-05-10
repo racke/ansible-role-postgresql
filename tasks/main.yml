@@ -20,6 +20,21 @@
     state: present
   when: ansible_os_family == 'Suse'
 
+- name: Install PostgreSQL development package (Debian)
+  package:
+    name: libpq-dev
+  when:
+    - postgresql_development
+    - ansible_os_family == 'Debian'
+
+- name: Install PostgreSQL development package (RedHat and Suse)
+  package:
+    name: postgresql-devel
+    state: present
+  when:
+   - postgresql_development
+   - ansible_os_family == 'RedHat' or ansible_os_family == 'Suse'
+
 - name: Query information about the PostgreSQL user
   getent:
     database: passwd
