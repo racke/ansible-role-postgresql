@@ -136,7 +136,8 @@
 - name: Copy PostgreSQL custom dump files
   copy:
     src: "{{ item.restore_from }}"
-    dest: "{{ postgresql_user_home }}/{{ item.restore_from }}"
+    dest: "{{ postgresql_user_home }}/{{ item.restore_from | basename }}"
+    remote_src: "{{ item.restore_from is abs }}"
     owner: "postgres"
     group: "postgres"
     mode: 0400
