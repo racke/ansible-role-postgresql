@@ -149,7 +149,7 @@
     - "{{ postgresql_databases }}"
 
 - name: Restore PostgreSQL databases from custom dumps
-  command: "pg_restore -d {{ item.name }} -v -1 {{ postgresql_user_home}}/{{ item.restore_from }}"
+  command: "pg_restore -d {{ item.name }} -v -1 {{ postgresql_user_home}}/{{ item.restore_from | basename }}"
   become: true
   become_user: "postgres"
   vars:
