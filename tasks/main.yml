@@ -93,6 +93,7 @@
     lc_collate: en_US.UTF-8
     lc_ctype: en_US.UTF-8
     owner: "{{ item.owner | default(omit) }}"
+    template: "{{ postgresql_template_database | default(omit) }}"
   register: postgresql_db_created
   become: true
   become_user: postgres
