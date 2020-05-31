@@ -1,0 +1,4 @@
+---
+- name: Create cluster
+  command: pg_createcluster {{ postgresql_cluster_version }} {{ postgresql_cluster_name | default('main') }} --start
+  register: postgresql_create_cluster
