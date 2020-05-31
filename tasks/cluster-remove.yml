@@ -1,0 +1,4 @@
+---
+- name: Remove cluster
+  command: pg_dropcluster {{ postgresql_cluster_version }} {{ postgresql_cluster_name | default('main') }} --stop
+  register: postgresql_remove_cluster
