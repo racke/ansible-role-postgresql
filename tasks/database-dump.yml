@@ -1,0 +1,21 @@
+---
+
+- name: Ensure that directory for dumps exists and belongs to the PostgreSQL user
+  file:
+    state: directory
+    path: "{{ postgresql_dump_directory }}"
+    owner: "{{ postgresql_user }}"
+    group: "{{ postgresql_user }}"
+    mode: 0700
+
+- name: Dump PostgreSQL databases
+  postgresql_db:
+    name: "{{ item.name }}"
+    state: dump
+    target: "{{ postgresql_dump_directory + '/' + item.name + '.' + postgresql_dump_suffix | default ('sql') }}"
+  become: true
+  become_user: "{{ postgresql_user }}"
+  with_items: "{{ postgresql_databases }}"
+  vars:
+    ansible_ssh_pipelining: true
+  
