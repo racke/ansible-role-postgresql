@@ -5,3 +5,4 @@ postgresql_extra_roles: []
 postgresql_development: false
 postgresql_ansible_requirements:
   - python3-psycopg2
+postgresql_port: 5432
