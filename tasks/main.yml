@@ -80,7 +80,7 @@
 - name: Create additional roles for PostgreSQL
   postgresql_user:
     name: "{{ item }}"
-    port: "{{ item.port | default(postgresql_port }}"
+    port: "{{ item.port | default(postgresql_port) }}"
   become: true
   become_user: postgres
   vars:
