@@ -1,0 +1,7 @@
+---
+postgresql_os_server_packages:
+  - postgresql-server
+postgresql_ansible_requirements:
+  - python-psycopg2
+postgresql_initdb_path: "/usr/bin/initdb"
+postgresql_data_dir: "/var/lib/pgsql/data"

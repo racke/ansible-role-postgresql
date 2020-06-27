@@ -1,0 +1,6 @@
+---
+postgresql_ansible_requirements:
+  - python-psycopg2
+postgresql_os_server_packages:
+  - postgresql
+

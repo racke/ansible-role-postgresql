@@ -1,0 +1,5 @@
+---
+postgresql_os_server_packages:
+  - postgresql
+
+postgresql_template_database: template0

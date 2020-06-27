@@ -1,0 +1,8 @@
+---
+postgresql_os_server_packages:
+  - postgresql11-server
+postgresql_data_dir: "/var/db/postgres/data11"
+postgresql_initdb_path: "/usr/local/etc/rc.d/postgresql initdb"
+postgresql_ansible_requirements:
+  - py37-psycopg2
+postgresql_template_database: template0
