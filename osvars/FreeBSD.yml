@@ -2,6 +2,7 @@
 postgresql_os_server_packages:
   - postgresql11-server
 postgresql_data_dir: "/var/db/postgres/data11"
+postgresql_pg_hba_conf_file: "{{ postgresql_data_dir }}/pg_hba.conf"
 postgresql_initdb_path: "/usr/local/etc/rc.d/postgresql initdb"
 postgresql_ansible_requirements:
   - py37-psycopg2

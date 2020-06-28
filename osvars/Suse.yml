@@ -1,3 +1,4 @@
 ---
 postgresql_os_server_packages: 
  - postgresql-server
+postgresql_pg_hba_conf_file: "/var/lib/pgsql/data/pg_hba.conf"
