@@ -4,14 +4,12 @@
   command: pg_lsclusters -j
   register: postgresql_ls_clusters
 
-- name: Initialize cluster information variable
-  set_fact:
-    postgresql_cluster_info: "{{ postgresql_cluster_info | default({}) }}"
-
 - name: Transform cluster information into a dict
   set_fact:
-    postgresql_cluster_info: "{{ postgresql_cluster_info | combine ({ item.version : item }) }}"
+    postgresql_cluster_info: "{{ ( postgresql_cluster_info | default({}) ) | combine ({ item.version : item }) }}"
   with_items:
     "{{ postgresql_ls_clusters.stdout | from_json }}"
 
-
+- name: Determine version of currently running cluster
+  set_fact:
+    postgresql_cluster_version: "{{ postgresql_cluster_info | dict2items | selectattr('value.running', 'equalto', 1) | map(attribute='value.version') | list | first }}"
