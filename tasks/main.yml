@@ -65,7 +65,22 @@
 
 - name: Initialize PostgreSQL cluster
   import_tasks: initialize.yml
-  when: ansible_os_family == 'RedHat'
+  when: ansible_os_family in ['RedHat', 'FreeBSD']
+
+- name: Determine current cluster
+  import_tasks: cluster-info.yml
+  when: ansible_os_family in ['Debian']
+
+- name: Configure PostgreSQL client authentication (pg_hba.conf)
+  postgresql_pg_hba:
+    dest: "{{ item.conffile | default(postgresql_pg_hba_conf_file) }}"
+    contype: "{{ item.contype | default(omit) }}"
+    databases: "{{ item.databases | default(omit) }}"
+    users: "{{ item.users | default(omit) }}"
+    address: "{{ item.address | default(omit) }}"
+    method: "{{ item.method | default(omit) }}"
+  with_items: "{{ postgresql_pg_hba_entries | default([]) }}"
+  notify: restart postgresql
 
 - name: Ensure that PostgreSQL server is started and enabled
   service:
@@ -81,6 +96,7 @@
 - name: Create PostgreSQL role for owner
   postgresql_user:
     name: "{{ item.owner }}"
+    password: "{{ item.password | default(omit) }}"
     port: "{{ item.port | default(postgresql_port) }}"
   become: true
   become_user: postgres
@@ -94,6 +110,7 @@
 - name: Create additional roles for PostgreSQL
   postgresql_user:
     name: "{{ item }}"
+    password: "{{ item.password | default(omit) }}"
     port: "{{ item.port | default(postgresql_port) }}"
   become: true
   become_user: postgres
@@ -105,6 +122,7 @@
 - name: Create PostgreSQL databases
   postgresql_db:
     name: "{{ item.name }}"
+    state: "{{ item.state | default('present') }}"
     encoding: UTF-8
     lc_collate: en_US.UTF-8
     lc_ctype: en_US.UTF-8
@@ -168,7 +186,7 @@
     - "{{ postgresql_databases }}"
 
 - name: Restore PostgreSQL databases from custom dumps
-  command: "pg_restore -d {{ item.name }} -p {{ item.port | default(postgresql_port) }} -v -1 {{ postgresql_user_home}}/{{ item.restore_from | basename }}"
+  command: "pg_restore -n public -d {{ item.name }} -p {{ item.port | default(postgresql_port) }} -v -1 {{ postgresql_user_home}}/{{ item.restore_from | basename }}"
   become: true
   become_user: "postgres"
   vars:
