@@ -1,17 +1,29 @@
 ---
 - name: Determine location of PostgreSQL data directory
   set_fact:
-    postgresql_data_dir: "{{ postgresql_user_home }}/data"
-      
-- name: Check if PostgreSQL database is initialized.
+    postgresql_data_dir: "{{ postgresql_user_home }}"
+  when: postgresql_data_dir is not defined
+
+- name: Check if PostgreSQL database is initialized
   stat:
     path: "{{ postgresql_data_dir }}/PG_VERSION"
   register: postgresql_data_version_dir
 
-- name: Ensure PostgreSQL database is initialized.
-  command: "/usr/bin/initdb -D {{ postgresql_data_dir }}"
+- name: Ensure PostgreSQL database is initialized (RedHat)
+  command: "{{ postgresql_initdb_path }} -D {{ postgresql_data_dir }}"
   become: true
   become_user: "{{ postgresql_user }}"
   vars:
     ansible_ssh_pipelining: true
-  when: postgresql_data_version_dir.stat.exists == false
+  when:
+    - postgresql_data_version_dir.stat.exists == false
+    - ansible_os_family == 'RedHat'
+
+- name: Ensure PostgreSQL database is initialized (FreeBSD)
+  command: "{{ postgresql_initdb_path }} -D {{ postgresql_data_dir }}"
+  become: true
+  when:
+    - postgresql_data_version_dir.stat.exists == false
+    - ansible_os_family == 'FreeBSD'
+
+    
