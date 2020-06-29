@@ -12,25 +12,23 @@
       paths: osvars
 
 - name: Install PostgreSQL server package (Debian family)
-  apt:
-    name:
-      - postgresql
+  package:
+    name: "{{ postgresql_server_packages | default(postgresql_os_server_packages) }}"
     state: present
   when: ansible_os_family == 'Debian'
 
-- name: Install PostgreSQL server package (RedHat family)
-  yum:
-    name:
-      - postgresql-server
+- name: Install PostgreSQL server package (RedHat and Suse families)
+  package:
+    name: "{{ postgresql_server_packages | default(postgresql_os_server_packages) }}"
     state: present
-  when: ansible_os_family == 'RedHat'
+  when: ansible_os_family in ['RedHat', 'Suse']
 
-- name: Install PostgreSQL server package (Suse family)
-  zypper:
+- name: Install PostgreSQL server package (FreeBSD)
+  package:
     name:
-      - postgresql-server
+      - postgresql11-server
     state: present
-  when: ansible_os_family == 'Suse'
+  when: ansible_os_family in ['FreeBSD']
 
 - name: Install PostgreSQL development package (Debian)
   package:
