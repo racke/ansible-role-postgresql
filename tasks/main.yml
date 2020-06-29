@@ -45,6 +45,11 @@
    - postgresql_development
    - ansible_os_family == 'RedHat' or ansible_os_family == 'Suse'
 
+- name: Install prerequisites for PostgreSQL modules
+  package:
+    name: "{{ postgresql_ansible_requirements }}"
+    state: present
+
 - name: Query information about the PostgreSQL user
   getent:
     database: passwd
