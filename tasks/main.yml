@@ -55,14 +55,13 @@
     database: passwd
     key: "{{ postgresql_user }}"
     split: ":"
-  register: postgres_user_info
+  register: postgresql_user_info
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Determine home directory of the PostgreSQL user
   set_fact:
     postgresql_user_home: "{{ getent_passwd['postgres'][4] }}"
-
-- debug:
-    var: postgresql_user_home
+  when: not postgresql_user_info.failed
 
 - name: Initialize PostgreSQL cluster
   import_tasks: initialize.yml
