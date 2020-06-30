@@ -67,6 +67,11 @@
   import_tasks: initialize.yml
   when: ansible_os_family in ['RedHat', 'FreeBSD']
 
+- name: Install prerequisite for JSON output option of pg_listclusters (Debian)
+  package:
+    name: libjson-perl
+  when: ansible_os_family == 'Debian'
+
 - name: Determine current cluster
   import_tasks: cluster-info.yml
   when: ansible_os_family in ['Debian']
