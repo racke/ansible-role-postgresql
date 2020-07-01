@@ -1,0 +1,4 @@
+---
+
+- name: Upgrade cluster
+  command: pg_upgradecluster {{ postgresql_cluster_version }} {{ postgresql_cluster_name | default('main') }} -m upgrade
