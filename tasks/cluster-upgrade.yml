@@ -2,3 +2,10 @@
 
 - name: Upgrade cluster
   command: pg_upgradecluster {{ postgresql_cluster_version }} {{ postgresql_cluster_name | default('main') }} -m upgrade
+
+- name: Vacuum PostgreSQL database
+  command: vacuumdb --analyze --all
+  become: true
+  become_user: postgres
+  vars:
+    ansible_ssh_pipelining: true
