@@ -65,7 +65,7 @@
 
 - name: Initialize PostgreSQL cluster
   import_tasks: initialize.yml
-  when: ansible_os_family in ['RedHat', 'FreeBSD']
+  when: ansible_os_family in ['RedHat', 'FreeBSD', 'Suse']
 
 - name: Install prerequisite for JSON output option of pg_listclusters (Debian)
   package:
