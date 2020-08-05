@@ -107,6 +107,7 @@
   become_user: postgres
   vars:
     ansible_ssh_pipelining: true
+  no_log: true
   when:
     - "'owner' in item"
   with_items:
@@ -121,6 +122,7 @@
   become_user: postgres
   vars:
     ansible_ssh_pipelining: true
+  no_log: true
   with_items:
     - "{{ postgresql_extra_roles }}"
 
@@ -139,6 +141,7 @@
   become_user: postgres
   vars:
     ansible_ssh_pipelining: true
+  no_log: true
   with_items:
     - "{{ postgresql_databases }}"
 
@@ -149,6 +152,7 @@
     owner: "{{ item.owner}}"
     group: "{{ item.group | default(item.owner) }}"
     mode: 0400
+  no_log: true
   when:
     - postgresql_db_created.changed
     - "'restore_from' in item"
@@ -168,6 +172,7 @@
   become_user: "{{ item.owner }}"
   vars:
     ansible_ssh_pipelining: true
+  no_log: true
   when:
     - postgresql_db_created.changed
     - "'restore_from' in item"
@@ -183,6 +188,7 @@
     owner: "postgres"
     group: "postgres"
     mode: 0400
+  no_log: true
   when:
     - postgresql_db_created.changed
     - "'restore_from' in item"
@@ -196,6 +202,7 @@
   become_user: "postgres"
   vars:
     ansible_ssh_pipelining: true
+  no_log: true
   when:
     - postgresql_db_created.changed
     - "'restore_from' in item"
