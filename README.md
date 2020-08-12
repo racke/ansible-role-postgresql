@@ -8,13 +8,43 @@ Ansible 2.8 or later.
 
 ## Variables
 
-### postgresql_databases
+### *postgresql_databases*
 
-### postgresql_extra_roles
+A list of databases to be created. The database owners will created
+beforehand if necessary.
+
+  postgresql_databases:
+    - name: sympa
+      owner: sympa
+      password: nevairbe
+    - name: rt4
+      owner: requesttracker
+
+#### Encoding
+
+The encoding for a database is always `UTF-8`.
+
+### *postgresql_extra_roles*
+
+### *postgresql_dump_directory*
+
+See "Dump databases" below.
 
 ## Dependencies
 
 None.
+
+## Dump databases
+
+A separate task file `database-dump.yml` can be used to create database
+dumps:
+
+    - name: Dump database on source server
+      import_role:
+        name: postgresql
+        tasks_from: database-dump.yml
+      vars:
+        postgresql_dump_directory: /var/cache/pgsql
 
 ## Configuration parameters
 
@@ -44,7 +74,7 @@ Using tasks:
 
 ## License
 
-GPLv2
+Artistic License 2.0
 
 ## Author Information
 
