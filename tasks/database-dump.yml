@@ -15,6 +15,7 @@
     target: "{{ postgresql_dump_directory + '/' + item.name + '.' + postgresql_dump_suffix | default ('sql') }}"
   become: true
   become_user: "{{ postgresql_user }}"
+  no_log: true
   with_items: "{{ postgresql_databases }}"
   vars:
     ansible_ssh_pipelining: true
