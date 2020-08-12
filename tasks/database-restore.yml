@@ -1,0 +1,14 @@
+---
+
+- name: Restore databases from dump files
+  postgresql_db:
+    name: "{{ item.name }}"
+    state: restore
+    target: "{{ item.file }}"
+  become: true
+  become_user: postgres
+  vars:
+    ansible_ssh_pipelining: true
+  with_items: "{{ postgresql_restore_dumps }}"
+
+    
