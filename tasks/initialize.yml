@@ -17,7 +17,7 @@
     ansible_ssh_pipelining: true
   when:
     - postgresql_data_version_dir.stat.exists == false
-    - ansible_os_family in ['RedHat', 'Suse']
+    - ansible_os_family in ['Alpine', 'RedHat', 'Suse']
 
 - name: Ensure PostgreSQL database is initialized (FreeBSD)
   command: "{{ postgresql_initdb_path }} -D {{ postgresql_data_dir }}"

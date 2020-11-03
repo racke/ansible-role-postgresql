@@ -23,6 +23,12 @@
     state: present
   when: ansible_os_family in ['RedHat', 'Suse']
 
+- name: Install PostgresSQL server package (Alpine family)
+  package:
+    name: "{{ postgresql_server_packages | default(postgresql_os_server_packages) }}"
+    state: present
+  when: ansible_os_family in ['Alpine']
+
 - name: Install PostgreSQL server package (FreeBSD)
   package:
     name:
@@ -65,7 +71,7 @@
 
 - name: Initialize PostgreSQL cluster
   import_tasks: initialize.yml
-  when: ansible_os_family in ['RedHat', 'FreeBSD', 'Suse']
+  when: ansible_os_family in ['Alpine', 'RedHat', 'FreeBSD', 'Suse']
 
 - name: Install prerequisite for JSON output option of pg_listclusters (Debian)
   package:

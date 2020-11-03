@@ -1,0 +1,8 @@
+---
+postgresql_os_server_packages: 
+  - postgresql
+postgresql_initdb_path: "/usr/bin/initdb"
+postgresql_pg_hba_conf_file: "/var/lib/postgresql/pg_hba.conf"
+postgresql_template_database: "template0"
+postgresql_ansible_requirements:
+  - py3-psycopg2
