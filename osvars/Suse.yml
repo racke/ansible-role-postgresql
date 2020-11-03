@@ -4,3 +4,4 @@ postgresql_os_server_packages:
 postgresql_data_dir: "/var/lib/pgsql/data"
 postgresql_initdb_path: "/usr/bin/initdb"
 postgresql_pg_hba_conf_file: "/var/lib/pgsql/data/pg_hba.conf"
+postgresql_template_database: "template0"
