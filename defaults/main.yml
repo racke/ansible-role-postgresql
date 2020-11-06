@@ -6,3 +6,4 @@ postgresql_development: false
 postgresql_ansible_requirements:
   - python3-psycopg2
 postgresql_port: 5432
+postgresql_cluster_version_auto: false

@@ -76,11 +76,11 @@
 - name: Install prerequisite for JSON output option of pg_listclusters (Debian)
   package:
     name: libjson-perl
-  when: ansible_os_family == 'Debian'
+  when: postgresql_cluster_version_auto
 
 - name: Determine current cluster
   import_tasks: cluster-info.yml
-  when: ansible_os_family in ['Debian']
+  when: postgresql_cluster_version_auto
 
 - name: Configure PostgreSQL client authentication (pg_hba.conf)
   postgresql_pg_hba:
