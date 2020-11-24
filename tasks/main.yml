@@ -113,7 +113,7 @@
   become_user: postgres
   vars:
     ansible_ssh_pipelining: true
-  no_log: true
+  no_log: "{{ 'password' in item}}"
   when:
     - "'owner' in item"
   with_items:
@@ -128,7 +128,7 @@
   become_user: postgres
   vars:
     ansible_ssh_pipelining: true
-  no_log: true
+  no_log: "{{ 'password' in item}}"
   with_items:
     - "{{ postgresql_extra_roles }}"
 
@@ -147,7 +147,7 @@
   become_user: postgres
   vars:
     ansible_ssh_pipelining: true
-  no_log: true
+  no_log: "{{ 'password' in item}}"
   with_items:
     - "{{ postgresql_databases }}"
 
