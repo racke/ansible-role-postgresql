@@ -9,7 +9,9 @@
     postgresql_cluster_info: "{{ ( postgresql_cluster_info | default({}) ) | combine ({ item.version : item }) }}"
   with_items:
     "{{ postgresql_ls_clusters.stdout | from_json }}"
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Determine version of currently running cluster
   set_fact:
     postgresql_cluster_version: "{{ postgresql_cluster_info | dict2items | selectattr('value.running', 'equalto', 1) | map(attribute='value.version') | list | first }}"
+  ignore_errors: "{{ ansible_check_mode }}"
