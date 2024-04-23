@@ -1,6 +1,7 @@
 ---
 postgresql_user: postgres
 postgresql_databases: []
+postgresql_template_database: template0
 postgresql_extra_roles: []
 postgresql_development: false
 postgresql_ansible_requirements:
