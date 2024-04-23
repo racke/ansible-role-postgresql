@@ -132,6 +132,18 @@
   with_items:
     - "{{ postgresql_extra_roles }}"
 
+- name: Ensure a locale exists
+  community.general.locale_gen:
+    name: en_US.UTF-8
+    state: present
+  register: postgresql_locales
+
+- name: Reload PostgreSQL after locale change
+  service:
+    name: postgresql
+    state: restarted
+  when: postgresql_locales.changed
+
 - name: Create PostgreSQL databases
   postgresql_db:
     name: "{{ item.name }}"
