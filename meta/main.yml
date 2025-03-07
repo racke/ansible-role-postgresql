@@ -1,0 +1,5 @@
+---
+dependencies:
+  - "community.postgresql": "*"
+
+repository: "https://github.com/racke/ansible-role-postgresql.git"
