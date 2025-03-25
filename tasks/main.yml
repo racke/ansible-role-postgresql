@@ -137,6 +137,7 @@
     name: en_US.UTF-8
     state: present
   register: postgresql_locales
+  when: ansible_facts['os_family'] == 'Debian'
 
 - name: Reload PostgreSQL after locale change
   service:
