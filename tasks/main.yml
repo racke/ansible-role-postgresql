@@ -82,6 +82,16 @@
   import_tasks: cluster-info.yml
   when: postgresql_cluster_version_auto
 
+
+- name: PostgreSQL configuration file (postgresql.conf)
+  template:
+    src: postgresql.conf.j2
+    dest: "/etc/postgresql/{{ postgresql_cluster_version }}/main/postgresql.conf"
+    owner: "{{ postgresql_user }}"
+    group: "{{ postgresql_user }}"
+    mode: '0664'
+  notify: restart postgresql
+
 - name: Configure PostgreSQL client authentication (pg_hba.conf)
   postgresql_pg_hba:
     dest: "{{ item.conffile | default(postgresql_pg_hba_conf_file) }}"
