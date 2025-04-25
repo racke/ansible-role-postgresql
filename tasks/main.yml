@@ -17,11 +17,23 @@
     state: present
   when: ansible_os_family == 'Debian'
 
+- name: Import GPG key for yum-based systems
+  rpm_key:
+    state: present
+    key: "{{ postgresql_repo_gpg_key_url }}"
+  when: ansible_os_family == 'RedHat'
+
+- name: Add PostgreSQL repository
+  dnf:
+    name: "https://download.postgresql.org/pub/repos/yum/reporpms/EL-{{ ansible_distribution_major_version }}-x86_64/pgdg-redhat-repo-latest.noarch.rpm"
+  when: ansible_os_family == 'RedHat'
+
 - name: Install PostgreSQL server package (RedHat and Suse families)
   package:
     name: "{{ postgresql_server_packages | default(postgresql_os_server_packages) }}"
     state: present
-  when: ansible_os_family in ['RedHat', 'Suse']
+  when:
+    - ansible_os_family in ['RedHat', 'Suse']
 
 - name: Install PostgresSQL server package (Alpine family)
   package:
@@ -55,6 +67,7 @@
   package:
     name: "{{ postgresql_ansible_requirements }}"
     state: present
+  when: ansible_os_family != 'RedHat'
 
 - name: Query information about the PostgreSQL user
   getent:
