@@ -2,6 +2,7 @@
 
 - name: List clusters
   command: pg_lsclusters -j
+  changed_when: false
   register: postgresql_ls_clusters
 
 - name: Transform cluster information into a dict
