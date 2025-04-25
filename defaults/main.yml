@@ -1,4 +1,6 @@
 ---
+postgresql_version: 17
+postgresql_service: postgresql
 postgresql_user: postgres
 postgresql_databases: []
 postgresql_template_database: template0
