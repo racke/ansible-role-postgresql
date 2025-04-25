@@ -11,3 +11,5 @@ postgresql_ansible_requirements:
 postgresql_port: 5432
 postgresql_listen_addresses: localhost
 postgresql_cluster_version_auto: false
+
+postgresql_repo_gpg_key_url: 'https://ftp.postgresql.org/pub/repos/yum/keys/PGDG-RPM-GPG-KEY-RHEL'
