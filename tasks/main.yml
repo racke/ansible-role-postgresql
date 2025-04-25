@@ -95,11 +95,10 @@
   import_tasks: cluster-info.yml
   when: postgresql_cluster_version_auto
 
-
 - name: PostgreSQL configuration file (postgresql.conf)
   template:
     src: postgresql.conf.j2
-    dest: "/etc/postgresql/{{ postgresql_cluster_version }}/main/postgresql.conf"
+    dest: "{{ postgresql_conf_dir }}/postgresql.conf"
     owner: "{{ postgresql_user }}"
     group: "{{ postgresql_user }}"
     mode: '0664'
@@ -118,7 +117,7 @@
 
 - name: Ensure that PostgreSQL server is started and enabled
   service:
-    name: postgresql
+    name: "{{ postgresql_service }}"
     state: started
     enabled: yes
 
