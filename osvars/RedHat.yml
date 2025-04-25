@@ -1,6 +1,8 @@
 ---
+postgresql_service: "postgresql-{{ postgresql_version }}"
 postgresql_os_server_packages:
-  - postgresql-server
-postgresql_initdb_path: "/usr/bin/initdb"  
-postgresql_data_dir: "/var/lib/pgsql/data"
+  - "postgresql{{ postgresql_version }}-server"
+postgresql_initdb_path: "/usr/pgsql-{{ postgresql_version }}/bin/postgresql-{{ postgresql_version }}-setup initdb"
+postgresql_data_dir: "/var/lib/pgsql/{{ postgresql_version }}/data"
+postgresql_conf_dir: "{{ postgresql_data_dir }}"
 postgresql_pg_hba_conf_file: "{{ postgresql_data_dir }}/pg_hba.conf"
