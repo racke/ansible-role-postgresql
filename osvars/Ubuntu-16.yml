@@ -1,5 +1,0 @@
----
-postgresql_os_server_packages:
-  - postgresql
-postgresql_pg_hba_conf_file: "/etc/postgresql/{{ postgresql_cluster_version | default('9.5') }}/main/pg_hba.conf"
-postgresql_template_database: template0

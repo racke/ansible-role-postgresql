@@ -1,6 +1,0 @@
----
-postgresql_ansible_requirements:
-  - python-psycopg2
-postgresql_os_server_packages:
-  - postgresql
-postgresql_pg_hba_conf_file: "/etc/postgresql/{{ postgresql_cluster_version | default('9.4') }}/main/pg_hba.conf"
