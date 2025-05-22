@@ -121,7 +121,7 @@
 
 - name: Create additional roles for PostgreSQL
   postgresql_user:
-    name: "{{ item }}"
+    name: "{{ item.name }}"
     password: "{{ item.password | default(omit) }}"
     port: "{{ item.port | default(postgresql_port) }}"
   become: true
